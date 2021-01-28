@@ -51,7 +51,7 @@ class SGQuery():
         if Tasks:
             return Tasks
 
-    def GetAllAsstes(self, Porject, Filters=None, Fields=None):
+    def GetAllAsstes(self, Project, Filters=None, Fields=None):
         '''
             returns a list of Assets from the spesified project, filters and fields.
             if no filter return all Assets from the project
@@ -59,7 +59,9 @@ class SGQuery():
             Filter and Fields are  list, containing the filters or fields coma separated.
         '''
         if not Filters:
-            Filters = [SgFilter.ProjectIs(Porject)]
+            Filters = [SgFilter.ProjectIs(Project)]
+        else:
+            Filters.append(SgFilter.ProjectIs(Project))
 
         if not Fields:
             Fields = ['id', 'code', 'step', 'sg_asset_type']
@@ -67,25 +69,34 @@ class SGQuery():
         Assets = self.sg.find('Asset', Filters, Fields)
         return Assets
 
-    
+    def GetAllDigitalMedia(self, Project, Filters=None, Fields=None):
+        '''
+            return a list of all digital media (Versions) from the project and fields specified
+            if no Filter or fields spesified, defaut parameteres are set in place.
+        '''
+        if not Filters:
+            Filters = [SgFilter.ProjectIs(Project)]
+        
+        else:
+            Filters.append(SgFilter.ProjectIs(Project))
+
+        
+        if not Fields:
+            Fields = ['id', 'code', 'entity', 'sg_task']
+
+        
+        DM = self.sg.find('Version', Filters, Fields)
+        return DM
 
 if __name__ == '__main__':
     # test examples for debugin porposes porposes
     # and examples of usages 
     Sg = SGQuery()
-    Elements = Sg.GetAllAsstes(Sg.GGO_ID)
 
+    tempFilters = [SgFilter.EntityIs("Asset", 2400)]
+    Elements = Sg.GetAllDigitalMedia(Sg.GGO_ID, tempFilters)
 
-    for x,element in enumerate(Elements, 1):
-        if x > 50:
-            break
-        taskFilter = [SgFilter.ProjectIs(Sg.GGO_ID), SgFilter.EntityIs(element['type'], element['id']), SgFilter.StepIs('ART', 13),
-                     SgFilter.OperatorIfAnyOf([SgFilter.SgStatusIs('apr'), SgFilter.SgStatusIs('fin')])]
-        tasks = Sg.GetAllTask(Sg.GGO_ID, taskFilter)
-        print (element)
-        if tasks:
-            for item in tasks:
-                print (item)
+    print (len(Elements))
 
-
-
+    for x,element in enumerate(Elements):
+        print (x, element)
