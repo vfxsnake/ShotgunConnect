@@ -16,6 +16,14 @@ class SgPlayListMakerConnection(object):
     def GetSgConnection(self,):
         return self.sg
 
+    def __del__(self):
+        '''
+        when the class is destroyed, 
+        closes the contenctionto shotgun
+        '''
+        print (' Removing SgPlayListMakerConnection')
+        self.sg._close_connection()
+
 class SGQuery():
 
     def __init__(self):
@@ -24,15 +32,18 @@ class SGQuery():
             uses the imports the filter module to facilitate the filtering typing
 
         '''
-        ShotgunConnection = SgPlayListMakerConnection()
-        self.sg = ShotgunConnection.GetSgConnection()
-
+        self.Connection = SgPlayListMakerConnection()
+    
         self.UGC_ID = 159
         self.HEF_ID = 106
         self.GGO_ID = 161 #old version of gungo
         self.GNG_ID = 359 #gungo new project
     
-    
+    def __del__(self):
+        self.Connection.sg._close_connection()
+        
+        print ("Removing SgQuery")
+
 
     def GetAllTask(self, Project,Filters=None, Fields=None):
         ''' returns a list of tasks  spisify by project, filters and fields
@@ -47,7 +58,7 @@ class SGQuery():
         if not Fields:
             Fields = ['id', 'code', 'step', 'content', 'task_assignees']
         
-        Tasks = self.sg.find("Task", Filters, Fields)
+        Tasks = self.Connection.sg.find("Task", Filters, Fields)
         if Tasks:
             return Tasks
 
@@ -66,7 +77,7 @@ class SGQuery():
         if not Fields:
             Fields = ['id', 'code', 'step', 'sg_asset_type']
 
-        Assets = self.sg.find('Asset', Filters, Fields)
+        Assets = self.Connection.sg.find('Asset', Filters, Fields)
         return Assets
 
     def GetAllDigitalMedia(self, Project, Filters=None, Fields=None):
@@ -82,21 +93,62 @@ class SGQuery():
 
         
         if not Fields:
-            Fields = ['id', 'code', 'entity', 'sg_task']
+            Fields = ['id', 'code', 'entity', 'sg_task', 'sg_status_list']
 
         
-        DM = self.sg.find('Version', Filters, Fields)
+        DM = self.Connection.sg.find('Version', Filters, Fields)
         return DM
+
+class SgDataTransfer():
+    
+    # -> notation means return so this funciton return none
+    def __init__(self) -> None: 
+        self.Connection = SgPlayListMakerConnection()
+    
+    @staticmethod
+    def DownloadVersionUploadedFile(self, VersionDic):
+        pass
+    
+    @staticmethod    
+    def UploadToVersion(self, VersionDic):
+        pass
+
+class SgCreateEntity():
+    
+    def __init__(self) -> None:
+        pass
+    
+    @staticmethod
+    def CreateVersion(Project, VersionCode):
+        pass
+
+class UpdateStatuses():
+    def __init__(self) -> None:
+        pass
+    
+    @staticmethod    
+    def UpdateStatus(self, args):
+        pass
+    
+    @staticmethod
+    def Register(self, args):
+        pass
 
 if __name__ == '__main__':
     # test examples for debugin porposes porposes
     # and examples of usages 
+    
+    print ('loading SgQuery');
     Sg = SGQuery()
 
-    tempFilters = [SgFilter.EntityIs("Asset", 2400)]
-    Elements = Sg.GetAllDigitalMedia(Sg.GGO_ID, tempFilters)
+    tempFilters = [SgFilter.EntityIs("Asset", 2400), SgFilter.OperatorIfAnyOf([SgFilter.SgStatusIs('apr'), SgFilter.SgStatusIs('fin')]) ]
+    
+    print('make query')
+    Elements = Sg.GetAllDigitalMedia(Sg.GGO_ID)
 
     print (len(Elements))
 
-    for x,element in enumerate(Elements):
-        print (x, element)
+    # for x,element in enumerate(Elements):
+    #     print (x, element)
+
+    # Published Files , published file dependicies para hacer el registro

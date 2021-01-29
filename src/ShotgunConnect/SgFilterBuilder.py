@@ -46,7 +46,7 @@ class SgFilterBuilder(object):
     @staticmethod
     def SgStatusIs(Status):
         ''' 
-            accepts "rdy, ip, app, rtk,, apr, dlvr, omt, rev, fin, opn" etc
+            accepts "rdy, ip, rtk,, apr, dlvr, omt, rev, fin, opn" etc
             
         '''
         return ['sg_status_list', 'is', Status]
@@ -54,9 +54,9 @@ class SgFilterBuilder(object):
     @staticmethod
     def OperatorIfAnyOf(FilterListToApply):
         '''
-            returns a dictionary containing the filter operator any, helps to include
-            two or more filters of the sem tipe, ex:
-            OperatorIfAnyof(sgFiltarBuilder.SgStatusIs('Apr'), sgFiltarBuilder.SgStatusIs('ip'), sgFiltarBuilder.SgStatusIs('sub'))
-            this filter operartor helps to find statuse in this 3 stages.
+            returns a dictionary containing the filter operator any to match 2 or more filters,
+            receive a list of filters of the same type
+            OperatorIfAnyof([sgFiltarBuilder.SgStatusIs('Apr'), sgFiltarBuilder.SgStatusIs('ip'), sgFiltarBuilder.SgStatusIs('sub')])
+            this exapmle helps to find statuses that match this 3  simalor to an 'or' mathematical operator.
         '''
         return {'filter_operator': 'any', 'filters': FilterListToApply }
