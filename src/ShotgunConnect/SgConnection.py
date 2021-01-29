@@ -103,11 +103,12 @@ class SgDataTransfer():
     
     # -> notation means return so this funciton return none
     def __init__(self) -> None: 
-        self.Connection = SgPlayListMakerConnection()
+        pass
     
     @staticmethod
-    def DownloadVersionUploadedFile(self, VersionDic):
-        pass
+    def DownloadVersionUploadedFile(VersionDic):
+        Connection = SgPlayListMakerConnection()
+        Connection.sg.download_attachment()
     
     @staticmethod    
     def UploadToVersion(self, VersionDic):
