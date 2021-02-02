@@ -99,20 +99,17 @@ class SGQuery():
         DM = self.Connection.sg.find('Version', Filters, Fields)
         return DM
 
-class SgDataTransfer():
-    
-    # -> notation means return so this funciton return none
-    def __init__(self) -> None: 
+class SgTransferFiles():
+    def __init__(self):
+        self.Connection = SgPlayListMakerConnection()
+        
+    def GetVersion(self, VerisionQuery):
         pass
     
-    @staticmethod
-    def DownloadVersionUploadedFile(VersionDic):
-        Connection = SgPlayListMakerConnection()
-        Connection.sg.download_attachment()
-    
-    @staticmethod    
-    def UploadToVersion(self, VersionDic):
+    def UploadToVersion(self, VersionQuery, FileToUpload):
         pass
+        
+
 
 class SgCreateEntity():
     
@@ -139,7 +136,7 @@ if __name__ == '__main__':
     # test examples for debugin porposes porposes
     # and examples of usages 
     
-    print ('loading SgQuery');
+    print ('loading SgQuery')
     Sg = SGQuery()
 
     tempFilters = [SgFilter.EntityIs("Asset", 2400), SgFilter.OperatorIfAnyOf([SgFilter.SgStatusIs('apr'), SgFilter.SgStatusIs('fin')]) ]
