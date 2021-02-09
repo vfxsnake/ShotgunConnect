@@ -60,3 +60,7 @@ class SgFilterBuilder(object):
             this exapmle helps to find statuses that match this 3  simalor to an 'or' mathematical operator.
         '''
         return {'filter_operator': 'any', 'filters': FilterListToApply }
+
+    @staticmethod
+    def CodeIs(codeName):
+        return ['code', 'is', codeName]
