@@ -64,3 +64,22 @@ class SgFilterBuilder(object):
     @staticmethod
     def CodeIs(codeName):
         return ['code', 'is', codeName]
+
+    @staticmethod
+    def GetSquemaFileds(Connection, EntityType):
+        """[get all the fields abailable for the specified entity Tupe, 
+            call this function for populating the backup DB]
+    
+        Args:
+            Connection (Object): [Instance of shotgun api to query fields]
+            EntityType ([type]): [type of the entity to query]
+
+        Returns:
+            [List]: [a list of fileds abalilabel for the specified Type]
+        """
+        Fields = []
+        for x in Connection.schema_field_read(EntityType):
+            Fields.append(x)
+        
+        return Fields
+        

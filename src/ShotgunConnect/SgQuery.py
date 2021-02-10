@@ -1,5 +1,8 @@
+from re import A
+from shotgun_api3.lib.six import assertCountEqual
 from SgFilterBuilder import SgFilterBuilder as SgFilter
 from SgConnection import SgPlayListMakerConnection
+from SgCreateEntity import SgCreateEntity
 
 class SGQuery(object):
     
@@ -22,16 +25,20 @@ class SGQuery(object):
         
         print ("Removing SgQuery")
 
-    def GetAllProjects(self):
+    def GetAllProjects(self, AllFileds = False):
         """Return the list of all projects in the shotgun site
            defualt field: 'id', 'name', 
 
         Returns:
             [type]: [description]
         """
-        return self.Connection.sg.find('Project', [], ['name'])
+        if AllFileds:
+            Fields = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'Project')
+        else:
+            Fields = ['name']
+        return self.Connection.sg.find('Project', [], Fields)
 
-    def GetAllTask(self, Project,Filters=None, Fields=None):
+    def GetAllTask(self, Project,Filters=None, Fields=None, AllFileds =False):
         """[Returns a list of all tasks matching the filters ]
 
         Args:
@@ -39,6 +46,7 @@ class SGQuery(object):
             Filters ([list], optional): [list of filters, for simplicity use the SGFilterBuilder to create this list]. Defaults to None.
             Fields ([list], optional): [specify contennts of the query, adds aditional keys to the returning didctionaries]. Defaults to None.
                 default fieds are 'id', 'code', 'step', 'content', 'task_assignees'
+            AllFields ([boolean], optional): [if true all abailable fields from the type will be returned in the query]
         Returns:
             [list of dictionaries]: [list of found Tansks in a form of dictionaries.]
         """
@@ -49,11 +57,14 @@ class SGQuery(object):
         if not Fields:
             Fields = ['id', 'code', 'step', 'content', 'task_assignees']
         
+        if AllFileds:
+            Fields = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'Task') 
+
         Tasks = self.Connection.sg.find("Task", Filters, Fields)
         if Tasks:
             return Tasks
 
-    def GetAllAsstes(self, Project, Filters=None, Fields=None):
+    def GetAllAsstes(self, Project, Filters=None, Fields=None, AllFields=False):
         """[Return list of all assets matching the specify query]
 
         Args:
@@ -61,6 +72,7 @@ class SGQuery(object):
             Filters ([list], optional): [list of filters created by SgFilterBuilder]. Defaults to None.
             Fields ([list], optional): [list of keys to be returned as part of the dictionaries from the query]. Defaults to None.
                 default fields are 'id', 'code', 'step', 'sg_asset_type'
+            AllFields ([boolean], optional): [if true all abailable fields from the type will be returned in the query]
         Returns:
             [list]: [List of dictionaries of all assets queried if match]
         """
@@ -70,12 +82,15 @@ class SGQuery(object):
             Filters.append(SgFilter.ProjectIs(Project))
 
         if not Fields:
-            Fields = ['id', 'code', 'step', 'sg_asset_type', 'project']
+            Fields = ['id', 'code', 'step', 'sg_asset_type', 'project', 'task_template']
+
+        if AllFields:
+            Fields  = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'Asset')
 
         Assets = self.Connection.sg.find('Asset', Filters, Fields)
         return Assets
 
-    def GetAllDigitalMedia(self, Project, Filters=None, Fields=None):
+    def GetAllDigitalMedia(self, Project, Filters=None, Fields=None, AllFields=False):
         """[query all digital medira from the project specified]
 
         Args:
@@ -83,7 +98,7 @@ class SGQuery(object):
             Filters ([list], optional): [list of filters to be applied.]. Defaults to None.
             Fields ([list], optional): [list of key desired as part of the dictionary queries]. Defaults to None.
                 default fields are 'id', 'code', 'entity', 'sg_task', 'sg_status_list'
-
+            AllFields ([boolean], optional): [if true all abailable fields from the type will be returned in the query]
         Returns:
             [lit]: [list of dictionaries matching the query]
         """
@@ -97,33 +112,57 @@ class SGQuery(object):
         if not Fields:
             Fields = ['id', 'code', 'entity', 'sg_task', 'sg_status_list']
 
+        if AllFields:
+            Fields = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'Version')
         
         DM = self.Connection.sg.find('Version', Filters, Fields)
         return DM
 
-    def GetAllUsers(self):
-        pass
+    def GetAllUsers(self, AllFields=False):
+        """[Returns all unsers form the shotgun site]
 
+        Args:
+            AllFields (bool, optional): [add all fields to the returning dictionaries, spacial use for backup the database]. Defaults to False.
+        """
+        Fields = []
+        if AllFields:
+            Fields = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'HumanUser')
+        
+        return self.Connection.sg.find('HumanUser', [], Fields)
+
+    def GetAllPublishdeFiles(self, ProjectId, AllFields =None):
+        
+    
+    def GetAllFileDependency(self, ProjectId):
+        pass
+        
     def FindAssetByName(self, ProjectId, AssetName):
         data = [SgFilter.CodeIs(AssetName), SgFilter.ProjectIs(ProjectId)]
-        return self.Connection.sg.find_one('Asset', data, [])
-
+        Fields = ['task_template', 'code', 'id', 'sg_status_list']
+        return self.Connection.sg.find_one('Asset', data, Fields)
 
 if __name__ == '__main__':
     # test examples for debugin porposes porposes
     # and examples of usages 
-    
-    print ('loading SgQuery')
     Sg = SGQuery()
-    # print (Sg.GetAllProjects())
-    test  = Sg.GetAllAsstes(Sg.SandBox_ID)
-    # print (test[0])
-    
-    print (Sg.FindAssetByName(Sg.SandBox_ID, 'apicreatedAsset01') )
+    # AssetFilter = [SgFilter.ProjectIs(Sg.GGO_ID), SgFilter.ShotgunAssetTypeIs("CHARACTER")]
+    # oldGungoAssets  = Sg.GetAllAsstes(Sg.GGO_ID, AssetFilter)
+    print (Sg.GetAllUsers(AllFields=True))
 
 
-    # SgCreateEntity.CreateAsset(Sg.Connection.GetSgConnection(), data )
+    # for x,element in  enumerate(oldGungoAssets, 0):
 
+        # newProject = {'id': 227, 'type': 'Project'}
+        
+        # data = {'project': newProject, 'code': element['code'], 'sg_old_id': element['id'], 'task_template': element['task_template'], 'sg_asset_type': element['sg_asset_type']}
+        # print(data)
+
+        # assetExists =  Sg.FindAssetByName(data['project']['id'], data['code']) 
+        # if not assetExists:
+        #     SgCreateEntity.CreateAsset(Sg.Connection.GetSgConnection(), data )
+
+    # else:
+    #     print ('Asset exists', assetExists)
 
     # tempFilters = [SgFilter.EntityIs("Asset", 2400), SgFilter.OperatorIfAnyOf([SgFilter.SgStatusIs('apr'), SgFilter.SgStatusIs('fin')]) ]
     
