@@ -131,7 +131,7 @@ class SGQuery(object):
         return self.Connection.sg.find('HumanUser', [], Fields)
 
     def GetAllPublishdeFiles(self, ProjectId, AllFields =None):
-        
+        pass
     
     def GetAllFileDependency(self, ProjectId):
         pass
@@ -148,6 +148,7 @@ if __name__ == '__main__':
     # AssetFilter = [SgFilter.ProjectIs(Sg.GGO_ID), SgFilter.ShotgunAssetTypeIs("CHARACTER")]
     # oldGungoAssets  = Sg.GetAllAsstes(Sg.GGO_ID, AssetFilter)
     print (Sg.GetAllUsers(AllFields=True))
+
 
 
     # for x,element in  enumerate(oldGungoAssets, 0):
