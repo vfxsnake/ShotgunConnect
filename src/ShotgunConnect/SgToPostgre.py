@@ -1,19 +1,32 @@
 import psycopg2 
 
-class PostgreConnection(object):
-    def __init__(self) -> None:
+class ShotgunToPostgreConnection(object):
+    def __init__(self):
         self.Connection = psycopg2.connect(host='localhost', database='sgtest',user ='shotgundb', password='Huevo1234#')
 
-        cursor =  self.Connection.cursor()
+        self.cursor =  self.Connection.cursor()
+        print("conection succes")
 
-        print('PostgreSQL version:')
-        cursor.execute('Select version()')
+    def CloseConnection(self):
+        self.CreateTable.close()
+    
+    def CreateTable(self, dictionaryData=None):
+        
+        self.DropTableIExists('assets')
+        NewTable = "CREATE TABLE assets(id serial PRIMARY KEY, name varchar(100), code varchar(100))"
+        self.cursor.execute(NewTable)
+        self.Connection.commit()
+        print ('New table commit')
 
-        db_version = cursor.fetchone()
-        print(db_version)
+    def DropDataBase(self,):
+        pass
+    
+    def DropTableIExists(self, TableName):
+        command = "DROP TABLE IF EXISTS {0}".format(TableName)
+        self.cursor.execute(command) 
 
-        cursor.close()
 
 
 if __name__ == '__main__':
-    test = PostgreConnection()
+    test = ShotgunToPostgreConnection()
+    test.CreateTable()
