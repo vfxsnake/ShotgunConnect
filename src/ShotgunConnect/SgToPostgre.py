@@ -3,9 +3,9 @@ import json
 
 class ShotgunToPostgreConnection(object):
     def __init__(self):
-        # self.Connection = psycopg2.connect(host='localhost', database='sgtest',user ='shotgundb', password='Huevo1234#')
-        self.cursor = None
-        # self.cursor =  self.Connection.cursor()
+        self.Connection = psycopg2.connect(host='localhost', database='sgtest',user ='shotgundb', password='Huevo1234#')
+        # self.cursor = None
+        self.cursor =  self.Connection.cursor()
         print("conection succes")
 
     def CloseConnection(self):
@@ -15,12 +15,12 @@ class ShotgunToPostgreConnection(object):
         ColumnNameString = ' JSON UNIQUE Constraint, '.join(ColumnNamesList)
         
 
-        # self.DropTableIfExists('assets')
+        self.DropTableIfExists('assets')
         NewTable = "CREATE TABLE assets (id serial PRIMARY KEY, {0}".format(ColumnNameString)
         print (NewTable)
-        # self.cursor.execute(NewTable)
-        # self.Connection.commit()
-        # print ('New table commit')
+        self.cursor.execute(NewTable)
+        self.Connection.commit()
+        print ('New table commit')
 
     def InserDataToTable(self, assets, Datata):
         IsertData = None
@@ -35,8 +35,7 @@ class ShotgunToPostgreConnection(object):
             
 
 if __name__ == '__main__':
-    # test = ShotgunToPostgreConnection()
-    # test.CreateTable()
+
     from SgQuery import *
 
     query = SGQuery()
@@ -49,6 +48,7 @@ if __name__ == '__main__':
     # print (keyList)
 
     postgresBridge.CreateTable('asset', keyList)
+
 
     
 
