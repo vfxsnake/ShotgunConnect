@@ -14,7 +14,7 @@ class ShotgunToPostgreConnection(object):
     def CreateTable(self, TableName):
 
         self.DropTableIfExists(TableName)
-        NewTable = "CREATE TABLE {0} (id serial PRIMARY KEY)".format(TableName)
+        NewTable = "CREATE TABLE {0}".format(TableName)
         table = self.cursor.execute(NewTable)
         self.Connection.commit()
         print ('New table commit', table)
