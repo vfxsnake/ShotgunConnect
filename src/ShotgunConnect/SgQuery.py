@@ -1,5 +1,3 @@
-from re import A
-from shotgun_api3.lib.six import assertCountEqual
 from SgFilterBuilder import SgFilterBuilder as SgFilter
 from SgConnection import SgPlayListMakerConnection
 from SgCreateEntity import SgCreateEntity
@@ -129,6 +127,14 @@ class SGQuery(object):
             Fields = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'HumanUser')
         
         return self.Connection.sg.find('HumanUser', [], Fields)
+
+    def GetAllNotes(self, ProjectId ,AllFields = False):
+        Filters = [SgFilter.ProjectIs(ProjectId) ]
+        Fields = []
+        if AllFields:
+            Fields = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'Notes')
+        
+        return self.Connection.sg.find('Notes', Filters, Fields)
 
     def GetAllPublishdeFiles(self, ProjectId, AllFields =None):
         pass

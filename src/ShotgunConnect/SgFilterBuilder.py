@@ -79,7 +79,11 @@ class SgFilterBuilder(object):
         """
         Fields = []
         for x in Connection.schema_field_read(EntityType):
-            Fields.append(x)
+            if not (x == 'updated_at' or x == 'created_at'):
+                Fields.append(x)
         
-        return Fields
+        if Fields:
+            return Fields
+        else:
+            return None
         

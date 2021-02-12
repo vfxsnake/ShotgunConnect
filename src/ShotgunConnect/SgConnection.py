@@ -1,6 +1,4 @@
 
-
-
 class SgPlayListMakerConnection(object):
 
     def __init__(self):
