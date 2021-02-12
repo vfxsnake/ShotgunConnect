@@ -11,7 +11,7 @@ class ShotgunToPostgreConnection(object):
     def CloseConnection(self):
         self.Connection.close()
     
-    def CreateTable(self, TableName, ColumnNamesList):
+    def CreateTable(self, TableName):
         ColumnNameString = ' JSON UNIQUE Constraint, '.join(ColumnNamesList)
         
 
