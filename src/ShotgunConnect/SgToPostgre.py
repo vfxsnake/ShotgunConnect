@@ -12,9 +12,9 @@ class ShotgunToPostgreConnection(object):
         self.Connection.close()
     
     def CreateTable(self, TableName):
-        
-        self.DropTableIfExists('assets')
-        NewTable = "CREATE TABLE assets (id serial PRIMARY KEY)"
+
+        self.DropTableIfExists(TableName)
+        NewTable = "CREATE TABLE {0} (id serial PRIMARY KEY)".format(TableName)
         table = self.cursor.execute(NewTable)
         self.Connection.commit()
         print ('New table commit', table)
@@ -52,8 +52,8 @@ if __name__ == '__main__':
     keyList = [x for x in Asset]
     # print (keyList)
 
-    postgresBridge.CreateTable('asset')
-    postgresBridge.AddMultipleColumnsToTable('asset', keyList, "JSON")
+    postgresBridge.CreateTable('assets')
+    postgresBridge.AddMultipleColumnsToTable('assets', keyList, "JSON")
 
 
     
