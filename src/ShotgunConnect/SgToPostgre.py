@@ -24,6 +24,7 @@ class ShotgunToPostgreConnection(object):
         NewColumn = "ALTER TABLE {0} ADD COLUMN {1} {2}".format(TableName, ColumnName, DataType);
         try:
             self.cursor.execute(NewColumn)
+            print (NewColumn)
             self.cursor.commit()
         except:
             pass
