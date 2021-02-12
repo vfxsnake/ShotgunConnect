@@ -18,7 +18,11 @@ class ShotgunToPostgreConnection(object):
         self.Connection.commit()
         print ('New table commit')
 
-    def DropDataBase(self,):
+
+    def InserDataToTable(self, TableName, Datata):
+        pass
+
+    def DropDataBase(self):
         pass
     
     def DropTableIExists(self, TableName):
