@@ -55,7 +55,7 @@ if __name__ == '__main__':
     # print (keyList)
 
     postgresBridge.CreateTable('asset')
-    postgresBridge.AddMultipleColumnsToTable('asset', keyList)
+    postgresBridge.AddMultipleColumnsToTable('asset', keyList, "JSON")
 
 
     
