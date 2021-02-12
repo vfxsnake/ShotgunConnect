@@ -14,7 +14,7 @@ class ShotgunToPostgreConnection(object):
     def CreateTable(self, TableName):
 
         self.DropTableIfExists(TableName)
-        NewTable = "CREATE TABLE {0} (id serial PRIMARY KEY)".format(TableName)
+        NewTable = "CREATE TABLE {0} (id integer PRIMARY KEY)".format(TableName)
         table = self.cursor.execute(NewTable)
         self.Connection.commit()
         print ('New table commit', table)
@@ -24,6 +24,7 @@ class ShotgunToPostgreConnection(object):
         NewColumn = "ALTER TABLE {0} ADD COLUMN {1} {2}".format(TableName, ColumnName, DataType);
         try:
             self.cursor.execute(NewColumn)
+            self.cursor.commit()
         except:
             pass
 
