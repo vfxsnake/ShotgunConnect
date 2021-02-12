@@ -14,14 +14,18 @@ class ShotgunToPostgreConnection(object):
     def CreateTable(self, TableName):
 
         self.DropTableIfExists(TableName)
-        NewTable = "CREATE TABLE {0}".format(TableName)
+        NewTable = "CREATE TABLE {0} (id serial PRIMARY KEY)".format(TableName)
         table = self.cursor.execute(NewTable)
         self.Connection.commit()
         print ('New table commit', table)
 
     def AddColumnToTable(self,TableName, ColumnName, DataType):
+
         NewColumn = "ALTER TABLE {0} ADD COLUMN {1} {2}".format(TableName, ColumnName, DataType);
-        self.cursor.execute(NewColumn)
+        try:
+            self.cursor.execute(NewColumn)
+        except:
+            pass
 
     def AddMultipleColumnsToTable(self, TableName, ColumnNameList, DataType):
         for element in ColumnNameList:
