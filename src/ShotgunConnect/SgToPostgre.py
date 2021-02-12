@@ -12,9 +12,7 @@ class ShotgunToPostgreConnection(object):
         self.Connection.close()
     
     def CreateTable(self, TableName):
-        ColumnNameString = ' JSON UNIQUE Constraint, '.join(ColumnNamesList)
         
-
         self.DropTableIfExists('assets')
         NewTable = "CREATE TABLE assets (id serial PRIMARY KEY)"
         table = self.cursor.execute(NewTable)
