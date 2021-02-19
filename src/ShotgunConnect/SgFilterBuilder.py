@@ -50,6 +50,13 @@ class SgFilterBuilder(object):
             
         '''
         return ['sg_status_list', 'is', Status]
+    
+    @staticmethod
+    def SgStatusIsNot(Status):
+        """
+            accepts "rdy, ip, rtk,, apr, dlvr, omt, rev, fin, opn" etc
+        """
+        return ['sg_status_list', 'is_not', Status]
 
     @staticmethod
     def OperatorIfAnyOf(FilterListToApply):

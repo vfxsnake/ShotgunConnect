@@ -21,7 +21,8 @@ class ShotgunToPostgreConnection(object):
 
     def AddColumnToTable(self,TableName, ColumnName, DataType):
 
-        NewColumn = "ALTER TABLE {0} ADD COLUMN {1} {2}".format(TableName, ColumnName, DataType);
+        NewColumn = "ALTER TABLE {0} ADD COLUMN {1} {2}".format(TableName, ColumnName, DataType)
+       
         try:
             self.cursor.execute(NewColumn)
             print (NewColumn)

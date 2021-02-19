@@ -153,7 +153,7 @@ if __name__ == '__main__':
     Sg = SGQuery()
     # AssetFilter = [SgFilter.ProjectIs(Sg.GGO_ID), SgFilter.ShotgunAssetTypeIs("CHARACTER")]
     # oldGungoAssets  = Sg.GetAllAsstes(Sg.GGO_ID, AssetFilter)
-    print (Sg.GetAllUsers(AllFields=True))
+    #print (Sg.GetAllUsers(AllFields=True))
 
 
 
