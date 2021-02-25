@@ -80,7 +80,7 @@ class SGQuery(object):
             Filters.append(SgFilter.ProjectIs(Project))
 
         if not Fields:
-            Fields = ['id', 'code', 'step', 'sg_asset_type', 'project', 'task_template']
+            Fields = ['id', 'code', 'step', 'sg_asset_type', 'project', 'task_template', 'sg_old_id']
 
         if AllFields:
             Fields  = SgFilter.GetSquemaFileds(self.Connection.GetSgConnection(), 'Asset')
@@ -151,9 +151,22 @@ if __name__ == '__main__':
     # test examples for debugin porposes porposes
     # and examples of usages 
     Sg = SGQuery()
+    
+    # AllNewAssets = Sg.GetAllAsstes(Sg.GNG_ID)
+    # print(AllNewAssets[0])
+    # oldTasks = Sg.GetAllTask(Sg.GGO_ID, AllFileds=True)
+    # newTasts = None
+
+    Filters  = [SgFilter.ProjectIs(Sg.GGO_ID), SgFilter.OperatorIfAnyOf([SgFilter.SgStatusIs('fin'), SgFilter.SgStatusIs('apr')])]
+    DM = Sg.GetAllDigitalMedia(Sg.GGO_ID, )
+
+    for element in DM:
+        print (element)
+
+
     # AssetFilter = [SgFilter.ProjectIs(Sg.GGO_ID), SgFilter.ShotgunAssetTypeIs("CHARACTER")]
-    # oldGungoAssets  = Sg.GetAllAsstes(Sg.GGO_ID, AssetFilter)
-    #print (Sg.GetAllUsers(AllFields=True))
+    # oldGungoAssets  = Sg.GetAllAsstes(Sg.GGO_ID, AssetFilter,AllFields=True)
+    # print (Sg.GetAllUsers(AllFields=True))
 
 
 
@@ -178,3 +191,5 @@ if __name__ == '__main__':
 
     # for x,element in enumerate(Elements):
     #     print (x, element)
+
+
